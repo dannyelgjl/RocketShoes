@@ -1,120 +1,50 @@
-import React from "react";
+import React, { Component } from "react";
 import { MdAddShoppingCart } from "react-icons/md";
+
+import { formatPrice } from "../../util/format";
+
+import api from "../../services/api";
 
 import { ProductList } from "./styles";
 
-function Home() {
-  return (
-    <ProductList>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-adidas-runfalcon-feminino/72/NQQ-4634-172/NQQ-4634-172_zoom1.jpg?ts=1599759001&"
-          alt="Tennis"
-        />
+export default class Home extends Component {
+  state = {
+    products: [],
+  };
 
-        <strong>Tênis muito daora</strong>
-        <span>R$130,50</span>
+  async componentDidMount() {
+    const response = await api.get("products");
 
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
+    const data = response.data.map((product) => ({
+      ...product,
+      priceFormatted: formatPrice(product.price),
+    }));
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
+    this.setState({ products: data });
+  }
 
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-adidas-runfalcon-feminino/72/NQQ-4634-172/NQQ-4634-172_zoom1.jpg?ts=1599759001&"
-          alt="Tennis"
-        />
+  render() {
+    const { products } = this.state;
 
-        <strong>Tênis muito daora</strong>
-        <span>R$130,50</span>
+    return (
+      <ProductList>
+        {products.map((product) => (
+          <li key={product.id}>
+            <img src={product.image} alt="Tennis" />
 
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
+            <strong>{product.title}</strong>
+            <span>{product.priceFormatted}</span>
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
+            <button type="button">
+              <div>
+                <MdAddShoppingCart size={16} color="#FFF" /> 3
+              </div>
 
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-adidas-runfalcon-feminino/72/NQQ-4634-172/NQQ-4634-172_zoom1.jpg?ts=1599759001&"
-          alt="Tennis"
-        />
-
-        <strong>Tênis muito daora</strong>
-        <span>R$130,50</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-adidas-runfalcon-feminino/72/NQQ-4634-172/NQQ-4634-172_zoom1.jpg?ts=1599759001&"
-          alt="Tennis"
-        />
-
-        <strong>Tênis muito daora</strong>
-        <span>R$130,50</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-adidas-runfalcon-feminino/72/NQQ-4634-172/NQQ-4634-172_zoom1.jpg?ts=1599759001&"
-          alt="Tennis"
-        />
-
-        <strong>Tênis muito daora</strong>
-        <span>R$130,50</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-adidas-runfalcon-feminino/72/NQQ-4634-172/NQQ-4634-172_zoom1.jpg?ts=1599759001&"
-          alt="Tennis"
-        />
-
-        <strong>Tênis muito daora</strong>
-        <span>R$130,50</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-    </ProductList>
-  );
+              <span>ADICIONAR AO CARRINHO</span>
+            </button>
+          </li>
+        ))}
+      </ProductList>
+    );
+  }
 }
-
-export default Home;
